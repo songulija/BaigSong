@@ -12,12 +12,11 @@ namespace RealEstateAPI.Data
         public int Id { get; set; }
         [ForeignKey(nameof(User))]
         public int? UserId { get; set; }
-        [NotMapped]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         [ForeignKey(nameof(PropertyType))]
         public int? PropertyTypeId { get; set; }
-        [NotMapped]
-        public PropertyType PropertyType { get; set; }
+        public virtual PropertyType PropertyType { get; set; }
+
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }

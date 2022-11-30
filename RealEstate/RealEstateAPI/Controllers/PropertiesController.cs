@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
@@ -21,20 +20,23 @@ namespace RealEstateAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<PropertiesController> _logger;
         private readonly IWebHostEnvironment _environment;
+        //private readonly DatabaseContext _databaseContext;
 
-        public PropertiesController(IUnitOfWork unitOfWork, IMapper mapper, 
+        public PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,
             ILogger<PropertiesController> logger, IWebHostEnvironment environment)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
             _environment = environment;
+            //_databaseContext = databaseContext;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllProperties()
         {
+
             var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
@@ -46,6 +48,7 @@ namespace RealEstateAPI.Controllers
         {
             var property = await _unitOfWork.Properties.Get(p => p.Id == id,
                 includeProperties: "PropertyType,Comments,Journals,FavouriteObjects");
+            //var property = await _databaseContext.Properties.Where(x => x.Id == id).Include(x => x.PropertyType).SingleOrDefaultAsync();
             var result = _mapper.Map<PropertyDTO>(property);
             return Ok(result);
         }
@@ -125,22 +128,6 @@ namespace RealEstateAPI.Controllers
             await _unitOfWork.Properties.Delete(id);
             await _unitOfWork.Save();
             return NoContent();
-        }
-
-        [HttpPost("UploadImage")]
-        public async Task<ActionResult> UploadImage()
-        {
-            bool Results = false;
-            //first get all the files
-            var _uploadedFiles = Request.Form.Files;
-            foreach(IFormFile source in _uploadedFiles)
-            {
-                //get file name of each 
-                string fileName = source.FileName;
-            }
-
-            return Ok(Results);
-
         }
     }
 }

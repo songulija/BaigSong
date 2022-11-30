@@ -14,8 +14,7 @@ namespace RealEstateAPI.Data
         public int Id { get; set; }
         [ForeignKey(nameof(Property))]
         public int? PropertyId { get; set; }
-        [NotMapped]
-        public Property Property { get; set; }
+        public virtual Property Property { get; set; }
         public byte[] Photo { get; set; }
     }
 }

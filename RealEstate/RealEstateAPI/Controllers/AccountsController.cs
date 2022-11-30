@@ -7,7 +7,6 @@ using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
 using RealEstateAPI.Services;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,6 +23,7 @@ namespace RealEstateAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AccountsController> _logger;
         private readonly IAuthManager _authManager;
+        //private readonly DatabaseContext _databaseContext;
 
         public AccountsController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<AccountsController> logger, IAuthManager authManager)
         {
@@ -31,9 +31,10 @@ namespace RealEstateAPI.Controllers
             _mapper = mapper;
             _logger = logger;
             _authManager = authManager;
+            //_databaseContext = databaseContext;
         }
         [HttpGet]
-        [Authorize(Roles = "ADMINISTRATOR")]
+
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -46,12 +47,12 @@ namespace RealEstateAPI.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetUser")]
-        [Authorize(Roles = "ADMINISTRATOR")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _unitOfWork.Users.Get(p => p.Id == id);
+            //var user = await _databaseContext.Users.Where(p => p.Id == id).Include(x => x.UserType).FirstOrDefaultAsync();            
+            var user = await _unitOfWork.Users.Get(x => x.Id == id, includeProperties: "UserType");
             var result = _mapper.Map<UserDTO>(user);
             return Ok(result);
         }

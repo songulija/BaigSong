@@ -10,8 +10,8 @@ using RealEstateAPI.Data;
 namespace RealEstateAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221129115941_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221130215605_InitialMigrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,15 +42,15 @@ namespace RealEstateAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "69924c0f-5d0d-46ae-870d-e1758eb49012",
-                            ConcurrencyStamp = "89ab7daa-69c0-469d-8b3d-44f56f83e967",
+                            Id = "bd854b9a-ca82-4cf8-9369-efbe3780fd2c",
+                            ConcurrencyStamp = "6885ff6e-be21-4669-a9c9-a5c57485eaad",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "711f9640-6593-4217-8759-1e7f9f18cc7f",
-                            ConcurrencyStamp = "6459696a-135a-49dd-b793-fd3b1f31ef46",
+                            Id = "c0e7843f-77d2-4f74-ac67-52c65e65cf88",
+                            ConcurrencyStamp = "732e8d8b-1dc0-42e3-b2aa-2ead7e388061",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -107,6 +107,26 @@ namespace RealEstateAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FavouriteProperties");
+                });
+
+            modelBuilder.Entity("RealEstateAPI.Data.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int?>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.Journal", b =>
@@ -196,9 +216,6 @@ namespace RealEstateAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Photo")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
@@ -229,9 +246,8 @@ namespace RealEstateAPI.Migrations
                             Address = "Gedimino g. 78",
                             City = "Vilnius",
                             Country = "Lithuania",
-                            Date = new DateTime(2022, 11, 29, 13, 59, 40, 541, DateTimeKind.Local).AddTicks(5481),
+                            Date = new DateTime(2022, 11, 30, 23, 56, 4, 468, DateTimeKind.Local).AddTicks(5047),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
-                            Photo = "https://cf.bstatic.com/xdata/images/hotel/270x200/344742578.jpg?k=fd7593cb20d8fc876b5e4525e2338486872957c1d77d97df1f9f846de8ffc171&o=",
                             Price = 50f,
                             PropertyTypeId = 1,
                             RoomNumber = 2,
@@ -244,9 +260,8 @@ namespace RealEstateAPI.Migrations
                             Address = "Gedimino g. 78",
                             City = "Vilnius",
                             Country = "Lithuania",
-                            Date = new DateTime(2022, 11, 29, 13, 59, 40, 544, DateTimeKind.Local).AddTicks(125),
+                            Date = new DateTime(2022, 11, 30, 23, 56, 4, 470, DateTimeKind.Local).AddTicks(9323),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
-                            Photo = "https://cf.bstatic.com/xdata/images/hotel/270x200/402244075.jpg?k=6d4bdee1710675d96af2fbeeedab63fbde64b897a90eb277aee25f55d546ea15&o=",
                             Price = 50f,
                             PropertyTypeId = 1,
                             RoomNumber = 2,
@@ -259,9 +274,8 @@ namespace RealEstateAPI.Migrations
                             Address = "Gedimino g. 78",
                             City = "Vilnius",
                             Country = "Lithuania",
-                            Date = new DateTime(2022, 11, 29, 13, 59, 40, 544, DateTimeKind.Local).AddTicks(161),
+                            Date = new DateTime(2022, 11, 30, 23, 56, 4, 470, DateTimeKind.Local).AddTicks(9354),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
-                            Photo = "https://cf.bstatic.com/xdata/images/hotel/270x200/183672191.jpg?k=1bc046ed0234d7cc23c30b61d3ff2f2ae1cc88f178fafcf8dd0895c4c88514f8&o=",
                             Price = 50f,
                             PropertyTypeId = 1,
                             RoomNumber = 2,
@@ -352,7 +366,7 @@ namespace RealEstateAPI.Migrations
                             Email = "lsongulija@gmail.com",
                             FirstName = "Lukas",
                             LastName = "Songulija",
-                            Password = "$2a$11$mH.ZZT7OPZo5b4goiMLjPeqfoDT6eeUSkJojNFyPMYDxqdtuPVySG",
+                            Password = "$2a$11$fGPTA317Hx9QBbHoXxV9VuSIqCt7xe8C7XCvGOtkuC5HITu.88LNK",
                             PhoneNumber = "+37061115217",
                             TypeId = 1
                         },
@@ -362,7 +376,7 @@ namespace RealEstateAPI.Migrations
                             Email = "kpigaga@gmail.com",
                             FirstName = "Karolis",
                             LastName = "Pigaga",
-                            Password = "$2a$11$B/aNsuBWL0eFmgPMEG9H5Oh14GDuLfYuW2y0rG2VwrizWjxytuQvq",
+                            Password = "$2a$11$0CmpaLaKjRgboSnHxp44Wu/tCLxz.eorymjZeQqwlKgnFmgIWIBqG",
                             PhoneNumber = "+37061115982",
                             TypeId = 1
                         });
@@ -398,57 +412,86 @@ namespace RealEstateAPI.Migrations
 
             modelBuilder.Entity("RealEstateAPI.Data.Comment", b =>
                 {
-                    b.HasOne("RealEstateAPI.Data.Property", null)
+                    b.HasOne("RealEstateAPI.Data.Property", "Property")
                         .WithMany("Comments")
                         .HasForeignKey("PropertyId");
 
-                    b.HasOne("RealEstateAPI.Data.User", null)
+                    b.HasOne("RealEstateAPI.Data.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.FavouriteProperty", b =>
                 {
-                    b.HasOne("RealEstateAPI.Data.Property", null)
+                    b.HasOne("RealEstateAPI.Data.Property", "Property")
                         .WithMany("FavouriteObjects")
                         .HasForeignKey("PropertyId");
 
-                    b.HasOne("RealEstateAPI.Data.User", null)
+                    b.HasOne("RealEstateAPI.Data.User", "User")
                         .WithMany("FavouriteProperties")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RealEstateAPI.Data.Image", b =>
+                {
+                    b.HasOne("RealEstateAPI.Data.Property", "Property")
+                        .WithMany("Images")
+                        .HasForeignKey("PropertyId");
+
+                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.Journal", b =>
                 {
-                    b.HasOne("RealEstateAPI.Data.Property", null)
+                    b.HasOne("RealEstateAPI.Data.Property", "Property")
                         .WithMany("Journals")
                         .HasForeignKey("PropertyId");
 
-                    b.HasOne("RealEstateAPI.Data.User", null)
+                    b.HasOne("RealEstateAPI.Data.User", "User")
                         .WithMany("Journals")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.Payment", b =>
                 {
-                    b.HasOne("RealEstateAPI.Data.Property", null)
+                    b.HasOne("RealEstateAPI.Data.Property", "Property")
                         .WithMany("Payments")
                         .HasForeignKey("PropertyId");
 
-                    b.HasOne("RealEstateAPI.Data.User", null)
+                    b.HasOne("RealEstateAPI.Data.User", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.Property", b =>
                 {
-                    b.HasOne("RealEstateAPI.Data.PropertyType", null)
+                    b.HasOne("RealEstateAPI.Data.PropertyType", "PropertyType")
                         .WithMany("Properties")
                         .HasForeignKey("PropertyTypeId");
 
-                    b.HasOne("RealEstateAPI.Data.User", null)
+                    b.HasOne("RealEstateAPI.Data.User", "User")
                         .WithMany("Properties")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("PropertyType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.User", b =>
@@ -465,6 +508,8 @@ namespace RealEstateAPI.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("FavouriteObjects");
+
+                    b.Navigation("Images");
 
                     b.Navigation("Journals");
 
