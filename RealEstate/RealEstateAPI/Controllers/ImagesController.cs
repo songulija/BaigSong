@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,23 +30,24 @@ namespace RealEstateAPI.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-        /*[HttpGet]
+
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetImages()
         {
             var images = await _unitOfWork.Images.GetAll();
-            foreach(var image in images)
+            foreach (var image in images)
             {
                 image.Photo = GetImage(Convert.ToBase64String(image.Photo));
             }
             var results = _mapper.Map<IList<ImageDTO>>(images);
 
             return Ok(results);
-        }*/
+        }
 
-        /*[HttpGet("property/{id:int}")]
+        [HttpGet("property/{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -61,9 +61,9 @@ namespace RealEstateAPI.Controllers
             var results = _mapper.Map<IList<ImageDTO>>(images);
 
             return Ok(results);
-        }*/
+        }
 
-        /*[HttpGet("{id:int}", Name = "GetImage")]
+        [HttpGet("{id:int}", Name = "GetImage")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetImage(int id)
@@ -72,7 +72,7 @@ namespace RealEstateAPI.Controllers
             image.Photo = GetImage(Convert.ToBase64String(image.Photo));
             var result = _mapper.Map<ImageDTO>(image);
             return Ok(result);
-        }*/
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -91,7 +91,7 @@ namespace RealEstateAPI.Controllers
             return CreatedAtRoute("GetImage", new { id = image.Id }, image);
         }
 
-        /*[HttpPost("upload")]
+        [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -116,7 +116,7 @@ namespace RealEstateAPI.Controllers
             }
             _logger.LogError($"Invalid Upload Image attempt in {nameof(SaveFile)}");
             return BadRequest("Submited invalid data");
-        }*/
+        }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -159,7 +159,7 @@ namespace RealEstateAPI.Controllers
             return NoContent();
         }
 
-        public byte[] GetImage(string sBase64String)
+        private byte[] GetImage(string sBase64String)
         {
             byte[] bytes = null;
             if (!string.IsNullOrEmpty(sBase64String))
