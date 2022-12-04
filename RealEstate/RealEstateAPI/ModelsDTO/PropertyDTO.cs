@@ -11,6 +11,8 @@ namespace RealEstateAPI.ModelsDTO
         [Required]
         public int PropertyTypeId { get; set; }
         [Required]
+        public int RentTypeId { get; set; }
+        [Required]
         public string Country { get; set; }
         [Required]
         public string City { get; set; }
@@ -37,6 +39,7 @@ namespace RealEstateAPI.ModelsDTO
         public int Id { get; set; }
         public UserDTO User { get; set; }
         public PropertyTypeDTO PropertyType { get; set; }
+        public RentTypeDTO RentType { get; set; }
         public virtual IList<CommentDTO> Comments { get; set; }
         public virtual IList<PaymentDTO> Payments { get; set; }
         public virtual IList<JournalDTO> Journals { get; set; }

@@ -37,7 +37,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetAllProperties()
         {
 
-            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType");
+            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -47,7 +47,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetProperty(int id)
         {
             var property = await _unitOfWork.Properties.Get(p => p.Id == id,
-                includeProperties: "PropertyType,Comments,Journals,FavouriteObjects");
+                includeProperties: "PropertyType,RentType,Comments,Journals,FavouriteObjects");
             //var property = await _databaseContext.Properties.Where(x => x.Id == id).Include(x => x.PropertyType).SingleOrDefaultAsync();
             var result = _mapper.Map<PropertyDTO>(property);
             return Ok(result);
@@ -58,7 +58,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByPropertyTypeId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.PropertyTypeId == id,
-                includeProperties: "PropertyType");
+                includeProperties: "PropertyType,RentType");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results.Count);
         }
@@ -69,7 +69,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByUserId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.UserId == id,
-                includeProperties: "PropertyType");
+                includeProperties: "PropertyType,RentType");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }

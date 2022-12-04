@@ -32,6 +32,7 @@ namespace RealEstateAPI.Data
         public DbSet<Journal> Journals { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<RentType> RentTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,6 +43,7 @@ namespace RealEstateAPI.Data
             builder.ApplyConfiguration(new UserTypesConfiguration());
             builder.ApplyConfiguration(new UsersConfiguration());
             builder.ApplyConfiguration(new PropertyTypesConfiguration());
+            builder.ApplyConfiguration(new RentTypesConfiguration());
             //applying RoleConfiguration. To add two user roles
             builder.ApplyConfiguration(new PropertiesConfiguration());
         }

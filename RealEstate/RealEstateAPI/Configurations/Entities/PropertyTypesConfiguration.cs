@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RealEstateAPI.Data;
+using System;
 
 namespace RealEstateAPI.Configurations.Entities
 { /// <summary>
@@ -16,24 +17,46 @@ namespace RealEstateAPI.Configurations.Entities
                 new PropertyType
                 {
                     Id = 1,
-                    Title = "Flat"
+                    Title = "Hotels",
+                    Date = DateTime.Now
                 },
                 new PropertyType
                 {
                     Id = 2,
-                    Title = "House"
+                    Title = "Apartments",
+                    Date = DateTime.Now
                 },
                 new PropertyType
                 {
                     Id = 3,
-                    Title = "Land"
+                    Title = "Resorts",
+                    Date = DateTime.Now
                 },
                 new PropertyType
                 {
                     Id = 4,
-                    Title = "Car"
+                    Title = "Villas",
+                    Date = DateTime.Now
+                },
+                new PropertyType
+                {
+                    Id = 5,
+                    Title = "Cabins",
+                    Date = DateTime.Now
+                },
+                new PropertyType
+                {
+                    Id = 6,
+                    Title = "Houses",
+                    Date = DateTime.Now
+                },
+                new PropertyType
+                {
+                    Id = 7,
+                    Title = "Lands",
+                    Date = DateTime.Now
                 }
-            );
+            ); ;
         }
     }
 }

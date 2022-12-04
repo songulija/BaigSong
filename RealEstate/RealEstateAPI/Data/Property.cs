@@ -16,7 +16,9 @@ namespace RealEstateAPI.Data
         [ForeignKey(nameof(PropertyType))]
         public int? PropertyTypeId { get; set; }
         public virtual PropertyType PropertyType { get; set; }
-
+        [ForeignKey(nameof(RentType))]
+        public int? RentTypeId { get; set; }
+        public virtual RentType RentType { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }

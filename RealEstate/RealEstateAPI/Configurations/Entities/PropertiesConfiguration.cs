@@ -15,6 +15,7 @@ namespace RealEstateAPI.Configurations.Entities
                    Id = 1,
                    UserId = 1,
                    PropertyTypeId = 1,
+                   RentTypeId = 2,
                    Country = "Lithuania",
                    City = "Vilnius",
                    Address = "Gedimino g. 78",
@@ -28,7 +29,8 @@ namespace RealEstateAPI.Configurations.Entities
                {
                    Id = 2,
                    UserId = 1,
-                   PropertyTypeId = 1,
+                   PropertyTypeId = 2,
+                   RentTypeId = 2,
                    Country = "Lithuania",
                    City = "Vilnius",
                    Address = "Gedimino g. 78",
@@ -42,7 +44,8 @@ namespace RealEstateAPI.Configurations.Entities
                {
                    Id = 3,
                    UserId = 1,
-                   PropertyTypeId = 1,
+                   PropertyTypeId = 2,
+                   RentTypeId = 2,
                    Country = "Lithuania",
                    City = "Vilnius",
                    Address = "Gedimino g. 78",

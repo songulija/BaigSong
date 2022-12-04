@@ -34,7 +34,6 @@ namespace RealEstateAPI.Controllers
             //_databaseContext = databaseContext;
         }
         [HttpGet]
-
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
