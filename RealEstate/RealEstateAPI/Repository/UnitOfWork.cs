@@ -19,6 +19,8 @@ namespace RealEstateAPI.Repository
         private IGenericRepository<User> _users;
         private IGenericRepository<Image> _images;
         private IGenericRepository<RentType> _rentTypes;
+        private IGenericRepository<Country> _countries;
+        private IGenericRepository<City> _cities;
 
         public UnitOfWork(DatabaseContext context)
         {
@@ -38,6 +40,8 @@ namespace RealEstateAPI.Repository
         public IGenericRepository<User> Users => _users ??= new GenericRepository<User>(_context);
         public IGenericRepository<Image> Images => _images ??= new GenericRepository<Image>(_context);
         public IGenericRepository<RentType> RentTypes => _rentTypes ??= new GenericRepository<RentType>(_context);
+        public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_context);
+        public IGenericRepository<City> Cities => _cities ??= new GenericRepository<City>(_context);
 
         public void Dispose()
         {

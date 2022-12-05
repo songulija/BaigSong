@@ -23,6 +23,8 @@ namespace RealEstateAPI.IRepository
         IGenericRepository<Payment> Payments { get; }
         IGenericRepository<Image> Images { get; }
         IGenericRepository<RentType> RentTypes { get; }
+        IGenericRepository<Country> Countries { get; }
+        IGenericRepository<City> Cities { get; }
         //then we have one more operation which is Save(). to call save when adding, updating
         //but this is outside repository becouse if there are multiple changes made at time it can be cought in one operation
         Task Save();

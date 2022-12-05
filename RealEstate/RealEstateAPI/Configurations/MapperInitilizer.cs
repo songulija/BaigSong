@@ -22,6 +22,18 @@ namespace RealEstateAPI.Configurations
             CreateMap<PropertyType, CreatePropertyTypeDTO>().ReverseMap();
             CreateMap<PropertyType, UpdatePropertyTypeDTO>().ReverseMap();
 
+            CreateMap<Country, CountryDTO>().ReverseMap();
+            CreateMap<Country, CreateCountryDTO>().ReverseMap();
+            CreateMap<Country, UpdateCountryDTO>().ReverseMap();
+
+            CreateMap<City, CityDTO>().ReverseMap();
+            CreateMap<City, CreateCityDTO>().ReverseMap();
+            CreateMap<City, UpdateCityDTO>().ReverseMap();
+
+            CreateMap<RentType, RentTypeDTO>().ReverseMap();
+            CreateMap<RentType, CreateRentTypeDTO>().ReverseMap();
+            CreateMap<RentType, UpdateRentTypeDTO>().ReverseMap();
+
             CreateMap<Property, PropertyDTO>().ReverseMap();
             CreateMap<Property, CreatePropertyDTO>().ReverseMap();
             CreateMap<Property, UpdatePropertyDTO>().ReverseMap();

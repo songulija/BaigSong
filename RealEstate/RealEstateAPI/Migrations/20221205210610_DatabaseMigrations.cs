@@ -3,10 +3,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RealEstateAPI.Migrations
 {
-    public partial class InitialMigrations : Migration
+    public partial class DatabaseMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Countries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "IdentityRole",
                 columns: table => new
@@ -28,11 +42,26 @@ namespace RealEstateAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PropertyTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RentTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RentTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,6 +75,27 @@ namespace RealEstateAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "City",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_City_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,8 +130,8 @@ namespace RealEstateAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     PropertyTypeId = table.Column<int>(type: "int", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RentTypeId = table.Column<int>(type: "int", nullable: true),
+                    CityId = table.Column<int>(type: "int", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -93,9 +143,21 @@ namespace RealEstateAPI.Migrations
                 {
                     table.PrimaryKey("PK_Properties", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Properties_City_CityId",
+                        column: x => x.CityId,
+                        principalTable: "City",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Properties_PropertyTypes_PropertyTypeId",
                         column: x => x.PropertyTypeId,
                         principalTable: "PropertyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Properties_RentTypes_RentTypeId",
+                        column: x => x.RentTypeId,
+                        principalTable: "RentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -241,23 +303,38 @@ namespace RealEstateAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Date", "Title" },
+                values: new object[] { 1, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(9423), "Lithuania" });
+
+            migrationBuilder.InsertData(
                 table: "IdentityRole",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "bd854b9a-ca82-4cf8-9369-efbe3780fd2c", "6885ff6e-be21-4669-a9c9-a5c57485eaad", "User", "USER" },
-                    { "c0e7843f-77d2-4f74-ac67-52c65e65cf88", "732e8d8b-1dc0-42e3-b2aa-2ead7e388061", "Administrator", "ADMINISTRATOR" }
+                    { "12133fdb-1529-4886-98da-301fd3571a65", "6aa443cb-5b58-42ba-b3cf-a19c3aeafc23", "User", "USER" },
+                    { "65390373-7cc0-455a-83eb-0926b8896272", "be3c204f-b0b6-48b0-a76c-297806d0fe6b", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
                 table: "PropertyTypes",
+                columns: new[] { "Id", "Date", "Photo", "Title" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2022, 12, 5, 23, 6, 9, 675, DateTimeKind.Local).AddTicks(482), "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=", "Hotels" },
+                    { 2, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2493), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg", "Apartments" },
+                    { 3, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2535), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg", "Resorts" },
+                    { 4, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2540), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg", "Houses" },
+                    { 5, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2543), "https://cf.bstatic.com/xdata/images/city/square250/777085.webp?k=b95bc65ec83682e7aafc89112ff398b1081be9696ef92556ffd4fb9648a6b807&o=", "Lands" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RentTypes",
                 columns: new[] { "Id", "Date", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Flat" },
-                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "House" },
-                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Land" },
-                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Car" }
+                    { 1, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6297), "Long Term" },
+                    { 2, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6630), "Short Term" }
                 });
 
             migrationBuilder.InsertData(
@@ -270,29 +347,49 @@ namespace RealEstateAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "TypeId" },
-                values: new object[] { 1, "lsongulija@gmail.com", "Lukas", "Songulija", "$2a$11$fGPTA317Hx9QBbHoXxV9VuSIqCt7xe8C7XCvGOtkuC5HITu.88LNK", "+37061115217", 1 });
+                table: "City",
+                columns: new[] { "Id", "CountryId", "Date", "Title" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5290), "Vilnius" },
+                    { 2, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5928), "Kaunas" },
+                    { 3, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5941), "Klaipėda" },
+                    { 4, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5944), "Palanga" },
+                    { 5, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5947), "Šiauliai" },
+                    { 6, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5950), "Druskininkai" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "TypeId" },
-                values: new object[] { 2, "kpigaga@gmail.com", "Karolis", "Pigaga", "$2a$11$0CmpaLaKjRgboSnHxp44Wu/tCLxz.eorymjZeQqwlKgnFmgIWIBqG", "+37061115982", 1 });
+                values: new object[,]
+                {
+                    { 1, "lsongulija@gmail.com", "Lukas", "Songulija", "$2a$11$ITWoCkAI3lE2tERFI.O9U.Caje5UVJV99O3x2IH/SP86EbSsxYvjm", "+37061115217", 1 },
+                    { 2, "kpigaga@gmail.com", "Karolis", "Pigaga", "$2a$11$.lCdZlsc3zVtGj/W1fbN6.sXmBaGsHhnA/h.xerRaEAXGUED1xVhi", "+37061115982", 1 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Properties",
-                columns: new[] { "Id", "Address", "City", "Country", "Date", "Description", "Price", "PropertyTypeId", "RoomNumber", "Title", "UserId" },
-                values: new object[] { 1, "Gedimino g. 78", "Vilnius", "Lithuania", new DateTime(2022, 11, 30, 23, 56, 4, 468, DateTimeKind.Local).AddTicks(5047), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 50f, 1, 2, "Vilnius Apartments & Suites - Town Hall", 1 });
+                columns: new[] { "Id", "Address", "CityId", "Date", "Description", "Price", "PropertyTypeId", "RentTypeId", "RoomNumber", "Title", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "Gedimino g. 71", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(1579), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius G71", 1 },
+                    { 2, "Gedimino g. 72", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2747), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 369f, 2, 1, 2, "Vilnius G72", 1 },
+                    { 3, "Gedimino g. 73", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2792), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 400f, 2, 1, 2, "Vilnius K73", 1 },
+                    { 4, "Gedimino g. 74", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2815), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius K74", 1 },
+                    { 5, "Gedimino g. 75", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2829), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 500f, 2, 1, 2, "Vilnius K75", 1 },
+                    { 6, "Rygos g. 10", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2839), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R10", 1 },
+                    { 7, "Rygos g. 11", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2843), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R11", 1 },
+                    { 8, "Rygos g. 12", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2848), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 589f, 4, 1, 2, "Vilnius R12", 1 },
+                    { 9, "Rygos g. 13", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2853), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R13", 1 },
+                    { 10, "Rygos g. 14", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2857), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 650f, 4, 1, 2, "Vilnius R14", 1 },
+                    { 11, "Rygos g. 15", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2861), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R15", 1 }
+                });
 
-            migrationBuilder.InsertData(
-                table: "Properties",
-                columns: new[] { "Id", "Address", "City", "Country", "Date", "Description", "Price", "PropertyTypeId", "RoomNumber", "Title", "UserId" },
-                values: new object[] { 2, "Gedimino g. 78", "Vilnius", "Lithuania", new DateTime(2022, 11, 30, 23, 56, 4, 470, DateTimeKind.Local).AddTicks(9323), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 50f, 1, 2, "Vilnius Apartments & Suites - Village Hall", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Properties",
-                columns: new[] { "Id", "Address", "City", "Country", "Date", "Description", "Price", "PropertyTypeId", "RoomNumber", "Title", "UserId" },
-                values: new object[] { 3, "Gedimino g. 78", "Vilnius", "Lithuania", new DateTime(2022, 11, 30, 23, 56, 4, 470, DateTimeKind.Local).AddTicks(9354), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 50f, 1, 2, "Vilnius Apartments & Suites - Karolis Hall", 1 });
+            migrationBuilder.CreateIndex(
+                name: "IX_City_CountryId",
+                table: "City",
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_PropertyId",
@@ -340,9 +437,19 @@ namespace RealEstateAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Properties_CityId",
+                table: "Properties",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Properties_PropertyTypeId",
                 table: "Properties",
                 column: "PropertyTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Properties_RentTypeId",
+                table: "Properties",
+                column: "RentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_UserId",
@@ -379,10 +486,19 @@ namespace RealEstateAPI.Migrations
                 name: "Properties");
 
             migrationBuilder.DropTable(
+                name: "City");
+
+            migrationBuilder.DropTable(
                 name: "PropertyTypes");
 
             migrationBuilder.DropTable(
+                name: "RentTypes");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "UserTypes");

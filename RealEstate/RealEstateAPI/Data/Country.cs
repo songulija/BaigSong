@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstateAPI.Data
 {
-    public class PropertyType
+    public class Country
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
-        public string Photo { get; set; }
-        public virtual IList<Property> Properties { get; set; }
+        /*public string Photo { get; set; }*/
+        public virtual IList<City> Cities { get; set; }
     }
 }

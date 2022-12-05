@@ -37,7 +37,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetAllProperties()
         {
 
-            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType");
+            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType,City,Images");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -47,7 +47,7 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetProperty(int id)
         {
             var property = await _unitOfWork.Properties.Get(p => p.Id == id,
-                includeProperties: "PropertyType,RentType,Comments,Journals,FavouriteObjects");
+                includeProperties: "PropertyType,RentType,City,Comments,Journals,FavouriteObjects,Images");
             //var property = await _databaseContext.Properties.Where(x => x.Id == id).Include(x => x.PropertyType).SingleOrDefaultAsync();
             var result = _mapper.Map<PropertyDTO>(property);
             return Ok(result);
@@ -58,9 +58,20 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByPropertyTypeId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.PropertyTypeId == id,
-                includeProperties: "PropertyType,RentType");
+                includeProperties: "PropertyType,RentType,City,Images");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
-            return Ok(results.Count);
+            return Ok(results);
+        }
+
+        [HttpGet("rentType/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPropertiesByRentTypeId(int id)
+        {
+            var properties = await _unitOfWork.Properties.GetAll(f => f.RentTypeId == id,
+                includeProperties: "PropertyType,RentType,City,Images");
+            var results = _mapper.Map<IList<PropertyDTO>>(properties);
+            return Ok(results);
         }
 
         [HttpGet("user/{id:int}")]
@@ -69,7 +80,29 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByUserId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.UserId == id,
-                includeProperties: "PropertyType,RentType");
+                includeProperties: "PropertyType,RentType,City,Images");
+            var results = _mapper.Map<IList<PropertyDTO>>(properties);
+            return Ok(results);
+        }
+
+        [HttpGet("city/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPropertiesByCityId(int id)
+        {
+            var properties = await _unitOfWork.Properties.GetAll(f => f.CityId == id,
+                includeProperties: "PropertyType,RentType,City,Images");
+            var results = _mapper.Map<IList<PropertyDTO>>(properties);
+            return Ok(results);
+        }
+
+        [HttpGet("country/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPropertiesByCountryId(int id)
+        {
+            var properties = await _unitOfWork.Properties.GetAll(f => f.City.CountryId== id,
+                includeProperties: "PropertyType,RentType,City,Images");
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
