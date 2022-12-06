@@ -30,7 +30,7 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCities()
         {
-            var cities = await _unitOfWork.Cities.GetAll();
+            var cities = await _unitOfWork.Cities.GetAll(includeProperties: "Country");
             var results = _mapper.Map<IList<CityDTO>>(cities);
             return Ok(results);
         }
@@ -39,14 +39,14 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCity(int id)
         {
-            var city = await _unitOfWork.Cities.Get(p => p.Id == id);
+            var city = await _unitOfWork.Cities.Get(p => p.Id == id, includeProperties: "Country");
             var result = _mapper.Map<CityDTO>(city);
             return Ok(result);
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateCity([FromBody] CreateCityDTO cityDTO)
         {
             if (!ModelState.IsValid)
@@ -57,7 +57,9 @@ namespace RealEstateAPI.Controllers
             var city = _mapper.Map<City>(cityDTO);
             await _unitOfWork.Cities.Insert(city);
             await _unitOfWork.Save();
-            return CreatedAtRoute("GetCity", new { id = city.Id }, city);
+            var createdCity = await _unitOfWork.Cities.Get(x => x.Id == city.Id, includeProperties: "Country");
+            var createdCityDTO = _mapper.Map<CityDTO>(createdCity);
+            return Ok(createdCityDTO);
         }
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
