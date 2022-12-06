@@ -16,7 +16,9 @@ namespace RealEstateAPI.Configurations
             CreateMap<UserType, UserTypeDTO>();
 
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UpdateUserDTO>().ReverseMap();
             CreateMap<User, DisplayUserDTO>().ReverseMap();
+
 
             CreateMap<PropertyType, PropertyTypeDTO>().ReverseMap();
             CreateMap<PropertyType, CreatePropertyTypeDTO>().ReverseMap();

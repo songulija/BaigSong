@@ -52,14 +52,14 @@ namespace RealEstateAPI.Controllers
         {
             //var user = await _databaseContext.Users.Where(p => p.Id == id).Include(x => x.UserType).FirstOrDefaultAsync();            
             var user = await _unitOfWork.Users.Get(x => x.Id == id, includeProperties: "UserType");
-            var result = _mapper.Map<UserDTO>(user);
+            var result = _mapper.Map<DisplayUserDTO>(user);
             return Ok(result);
         }
         [HttpPost]
         [Authorize(Roles = "ADMINISTRATOR")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateUser([FromBody] UserDTO userDTO)
         {
             if (!ModelState.IsValid)
@@ -70,14 +70,16 @@ namespace RealEstateAPI.Controllers
             var user = _mapper.Map<User>(userDTO);
             await _unitOfWork.Users.Insert(user);
             await _unitOfWork.Save();
-            return CreatedAtRoute("GetUser", new { id = user.Id }, user);
+            var createdUser = await _unitOfWork.Users.Get(x => x.Id == user.Id, includeProperties: "UserType");
+            var createdUserDTO = _mapper.Map<DisplayUserDTO>(createdUser);
+            return Ok(createdUserDTO);
         }
         [HttpPut("{id:int}")]
         [Authorize(Roles = "ADMINISTRATOR")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -93,6 +95,23 @@ namespace RealEstateAPI.Controllers
             //map favouritePropertyDTO to favouriteProperty domain object. puts all fields values from dto to favouriteProperty object
             _mapper.Map(userDTO, user);
             _unitOfWork.Users.Update(user);
+            await _unitOfWork.Save();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _unitOfWork.Users.Get(f => f.Id == id);
+            if (user == null)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteUser)}");
+                return BadRequest();
+            }
+            await _unitOfWork.Users.Delete(id);
             await _unitOfWork.Save();
             return NoContent();
         }

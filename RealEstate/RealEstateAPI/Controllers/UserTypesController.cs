@@ -97,12 +97,12 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUserType(int id)
         {
             var userType = await _unitOfWork.UserTypes.Get(f => f.Id == id);
             if (userType == null)
             {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteUser)}");
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteUserType)}");
                 return BadRequest();
             }
             await _unitOfWork.UserTypes.Delete(id);
