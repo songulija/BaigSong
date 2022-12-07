@@ -29,7 +29,7 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetComments()
         {
-            var comments = await _unitOfWork.Comments.GetAll();
+            var comments = await _unitOfWork.Comments.GetAll(includeProperties: "User,Property");
             var results = _mapper.Map<List<CommentDTO>>(comments);
             return Ok(results);
         }
@@ -39,8 +39,18 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetComment(int id)
         {
-            var comment = await _unitOfWork.Comments.Get(c => c.Id == id);
+            var comment = await _unitOfWork.Comments.Get(c => c.Id == id, includeProperties: "User,Property");
             var result = _mapper.Map<CommentDTO>(comment);
+            return Ok(result);
+        }
+
+        [HttpGet("property/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCommentsByPropertyId(int id)
+        {
+            var comments = await _unitOfWork.Comments.Get(c => c.PropertyId == id, includeProperties: "User,Property");
+            var result = _mapper.Map<CommentDTO>(comments);
             return Ok(result);
         }
 
@@ -53,7 +63,7 @@ namespace RealEstateAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDTO commentDTO)
         {
             if (!ModelState.IsValid)
@@ -64,8 +74,9 @@ namespace RealEstateAPI.Controllers
             var comment = _mapper.Map<Comment>(commentDTO);
             await _unitOfWork.Comments.Insert(comment);
             await _unitOfWork.Save();
-
-            return CreatedAtRoute("GetComment", new { id = comment.Id }, comment);
+            var createdComment = await _unitOfWork.Comments.Get(x => x.Id == comment.Id, includeProperties: "User,Property");
+            var createdCommentDTO = _mapper.Map<CommentDTO>(createdComment);
+            return Ok(createdCommentDTO);
         }
 
 
