@@ -54,8 +54,8 @@ namespace RealEstateAPI.Controllers
                 _logger.LogError($"Invalid CREATE attempt in {nameof(CreatePropertyType)}");
                 return BadRequest();
             }
-            var propertyType = _mapper.Map<Property>(propertyTypeDTO);
-            await _unitOfWork.Properties.Insert(propertyType);
+            var propertyType = _mapper.Map<PropertyType>(propertyTypeDTO);
+            await _unitOfWork.PropertyTypes.Insert(propertyType);
             await _unitOfWork.Save();
             return CreatedAtRoute("GetPropertyType", new { id = propertyType.Id }, propertyType);
         }

@@ -6,6 +6,7 @@ namespace RealEstateAPI.ModelsDTO
 {
     public class CreatePropertyTypeDTO
     {
+        [Required]
         public string Title { get; set; }
         [Required]
         public DateTime Date { get; set; }
