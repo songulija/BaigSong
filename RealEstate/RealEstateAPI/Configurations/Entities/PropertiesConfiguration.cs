@@ -163,6 +163,20 @@ namespace RealEstateAPI.Configurations.Entities
                    RoomNumber = 2,
                    Price = 550,
                    Date = DateTime.Now
+               },
+               new Property
+               {
+                   Id = 12,
+                   UserId = 1,
+                   PropertyTypeId = 2,
+                   RentTypeId = 1,
+                   CityId = 1,
+                   Address = "Justiniškių g. 10",
+                   Title = "Vilnius J10",
+                   Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
+                   RoomNumber = 2,
+                   Price = 450,
+                   Date = DateTime.Now
                }
             );
         }

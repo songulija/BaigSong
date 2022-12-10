@@ -49,6 +49,7 @@ namespace RealEstateAPI.Data
             builder.ApplyConfiguration(new CitiesConfiguration());
             //applying RoleConfiguration. To add two user roles
             builder.ApplyConfiguration(new PropertiesConfiguration());
+            builder.ApplyConfiguration(new FavouritePropertiesConfiguration());
         }
     }
 }

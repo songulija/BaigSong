@@ -33,7 +33,37 @@ namespace RealEstateAPI.Configurations.Entities
                     Email = "kpigaga@gmail.com",
                     PhoneNumber = "+37061115982",
                     Password = BCrypt.Net.BCrypt.HashPassword("123456"),
-                    TypeId = 1
+                    TypeId = 2
+                },
+                new User
+                {
+                    Id = 3,
+                    FirstName = "Eimantas",
+                    LastName = "Petraitis",
+                    Email = "epetraitis@gmail.com",
+                    PhoneNumber = "+37061115987",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    TypeId = 2
+                },
+                new User
+                {
+                    Id = 4,
+                    FirstName = "Jonas",
+                    LastName = "Povas",
+                    Email = "jpovas@gmail.com",
+                    PhoneNumber = "+37061115988",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    TypeId = 2
+                },
+                new User
+                {
+                    Id = 5,
+                    FirstName = "Jonas",
+                    LastName = "Kovas",
+                    Email = "jkovas@gmail.com",
+                    PhoneNumber = "+37061115989",
+                    Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                    TypeId = 2
                 }
             );
         }

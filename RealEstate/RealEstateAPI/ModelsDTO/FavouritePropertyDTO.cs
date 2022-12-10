@@ -6,7 +6,7 @@ namespace RealEstateAPI.ModelsDTO
     {
         public int UserId { get; set; }
         public int PropertyId { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class UpdateFavouritePropertyDTO : CreateFavouritePropertyDTO

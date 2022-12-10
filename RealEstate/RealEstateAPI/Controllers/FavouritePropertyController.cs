@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -18,19 +20,21 @@ namespace RealEstateAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<FavouritePropertyController> _logger;
+        private readonly DatabaseContext _databaseContext;
 
-        public FavouritePropertyController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<FavouritePropertyController> logger)
+        public FavouritePropertyController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<FavouritePropertyController> logger, DatabaseContext databaseContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _databaseContext = databaseContext;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetFavouriteProperties()
         {
-            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll();
+            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(includeProperties: "Property");
             var results = _mapper.Map<IList<FavouriteProperty>>(favouriteProperties);
             return Ok(results);
         }
@@ -39,7 +43,7 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetFavouriteProperty(int id)
         {
-            var favouriteProperty = await _unitOfWork.FavouriteProperties.Get(f => f.Id == id);
+            var favouriteProperty = await _unitOfWork.FavouriteProperties.Get(f => f.Id == id, includeProperties: "Property,User");
             var result = _mapper.Map<FavouritePropertyDTO>(favouriteProperty);
             return Ok(result);
         }
@@ -48,7 +52,7 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLikesCountByPropertyId(int id)
         {
-            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(f => f.PropertyId == id);
+            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(f => f.PropertyId == id, includeProperties: "Property,User");
             var results = _mapper.Map<IList<FavouritePropertyDTO>>(favouriteProperties);
             return Ok(results.Count);
         }
@@ -59,10 +63,11 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetFavouritePropertiesByUserId(int id)
         {
             var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(f => f.UserId == id,
-                includeProperties: "Property");
+                includeProperties: "Property,User");
             var results = _mapper.Map<IList<FavouritePropertyDTO>>(favouriteProperties);
             return Ok(results);
         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

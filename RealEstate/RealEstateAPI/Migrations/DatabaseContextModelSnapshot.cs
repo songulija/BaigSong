@@ -40,15 +40,15 @@ namespace RealEstateAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "12133fdb-1529-4886-98da-301fd3571a65",
-                            ConcurrencyStamp = "6aa443cb-5b58-42ba-b3cf-a19c3aeafc23",
+                            Id = "7a707aec-7daf-4adc-a91b-6839fa74b8dd",
+                            ConcurrencyStamp = "4e69c939-1d2b-4789-878b-13b1e5cb4557",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "65390373-7cc0-455a-83eb-0926b8896272",
-                            ConcurrencyStamp = "be3c204f-b0b6-48b0-a76c-297806d0fe6b",
+                            Id = "42d1fc47-c1f5-456b-95d6-31661624825c",
+                            ConcurrencyStamp = "20c3ac1e-a0ee-478c-9b02-7992f44b343f",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -81,42 +81,42 @@ namespace RealEstateAPI.Migrations
                         {
                             Id = 1,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5290),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4327),
                             Title = "Vilnius"
                         },
                         new
                         {
                             Id = 2,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5928),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4874),
                             Title = "Kaunas"
                         },
                         new
                         {
                             Id = 3,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5941),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4886),
                             Title = "Klaipėda"
                         },
                         new
                         {
                             Id = 4,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5944),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4888),
                             Title = "Palanga"
                         },
                         new
                         {
                             Id = 5,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5947),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4891),
                             Title = "Šiauliai"
                         },
                         new
                         {
                             Id = 6,
                             CountryId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5950),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4894),
                             Title = "Druskininkai"
                         });
                 });
@@ -170,7 +170,7 @@ namespace RealEstateAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(9423),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(9944),
                             Title = "Lithuania"
                         });
                 });
@@ -182,8 +182,8 @@ namespace RealEstateAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("PropertyId")
                         .HasColumnType("int");
@@ -198,6 +198,78 @@ namespace RealEstateAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FavouriteProperties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3236),
+                            PropertyId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3756),
+                            PropertyId = 2,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3767),
+                            PropertyId = 3,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3775),
+                            PropertyId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3778),
+                            PropertyId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3781),
+                            PropertyId = 4,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3783),
+                            PropertyId = 5,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3785),
+                            PropertyId = 4,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3788),
+                            PropertyId = 4,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3790),
+                            PropertyId = 2,
+                            UserId = 4
+                        });
                 });
 
             modelBuilder.Entity("RealEstateAPI.Data.Image", b =>
@@ -340,7 +412,7 @@ namespace RealEstateAPI.Migrations
                             Id = 1,
                             Address = "Gedimino g. 71",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(1579),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7669),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 350f,
                             PropertyTypeId = 2,
@@ -354,7 +426,7 @@ namespace RealEstateAPI.Migrations
                             Id = 2,
                             Address = "Gedimino g. 72",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2747),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7933),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 369f,
                             PropertyTypeId = 2,
@@ -368,7 +440,7 @@ namespace RealEstateAPI.Migrations
                             Id = 3,
                             Address = "Gedimino g. 73",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2792),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7947),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 400f,
                             PropertyTypeId = 2,
@@ -382,7 +454,7 @@ namespace RealEstateAPI.Migrations
                             Id = 4,
                             Address = "Gedimino g. 74",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2815),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7951),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 350f,
                             PropertyTypeId = 2,
@@ -396,7 +468,7 @@ namespace RealEstateAPI.Migrations
                             Id = 5,
                             Address = "Gedimino g. 75",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2829),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7954),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 500f,
                             PropertyTypeId = 2,
@@ -410,7 +482,7 @@ namespace RealEstateAPI.Migrations
                             Id = 6,
                             Address = "Rygos g. 10",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2839),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7957),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 600f,
                             PropertyTypeId = 4,
@@ -424,7 +496,7 @@ namespace RealEstateAPI.Migrations
                             Id = 7,
                             Address = "Rygos g. 11",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2843),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7960),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 550f,
                             PropertyTypeId = 4,
@@ -438,7 +510,7 @@ namespace RealEstateAPI.Migrations
                             Id = 8,
                             Address = "Rygos g. 12",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2848),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7964),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 589f,
                             PropertyTypeId = 4,
@@ -452,7 +524,7 @@ namespace RealEstateAPI.Migrations
                             Id = 9,
                             Address = "Rygos g. 13",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2853),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7967),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 600f,
                             PropertyTypeId = 4,
@@ -466,7 +538,7 @@ namespace RealEstateAPI.Migrations
                             Id = 10,
                             Address = "Rygos g. 14",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2857),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7970),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 650f,
                             PropertyTypeId = 4,
@@ -480,13 +552,27 @@ namespace RealEstateAPI.Migrations
                             Id = 11,
                             Address = "Rygos g. 15",
                             CityId = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2861),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7973),
                             Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
                             Price = 550f,
                             PropertyTypeId = 4,
                             RentTypeId = 1,
                             RoomNumber = 2,
                             Title = "Vilnius R15",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Address = "Justiniškių g. 10",
+                            CityId = 1,
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7977),
+                            Description = "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.",
+                            Price = 450f,
+                            PropertyTypeId = 2,
+                            RentTypeId = 1,
+                            RoomNumber = 2,
+                            Title = "Vilnius J10",
                             UserId = 1
                         });
                 });
@@ -515,35 +601,35 @@ namespace RealEstateAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 675, DateTimeKind.Local).AddTicks(482),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 214, DateTimeKind.Local).AddTicks(6053),
                             Photo = "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
                             Title = "Hotels"
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2493),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3885),
                             Photo = "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg",
                             Title = "Apartments"
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2535),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3914),
                             Photo = "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg",
                             Title = "Resorts"
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2540),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3918),
                             Photo = "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg",
                             Title = "Houses"
                         },
                         new
                         {
                             Id = 5,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2543),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3921),
                             Photo = "https://cf.bstatic.com/xdata/images/city/square250/777085.webp?k=b95bc65ec83682e7aafc89112ff398b1081be9696ef92556ffd4fb9648a6b807&o=",
                             Title = "Lands"
                         });
@@ -570,13 +656,13 @@ namespace RealEstateAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6297),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(7135),
                             Title = "Long Term"
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6630),
+                            Date = new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(7426),
                             Title = "Short Term"
                         });
                 });
@@ -619,7 +705,7 @@ namespace RealEstateAPI.Migrations
                             Email = "lsongulija@gmail.com",
                             FirstName = "Lukas",
                             LastName = "Songulija",
-                            Password = "$2a$11$ITWoCkAI3lE2tERFI.O9U.Caje5UVJV99O3x2IH/SP86EbSsxYvjm",
+                            Password = "$2a$11$iQUmDutf8EQMLucFZNrMW.XW/oL2UWQ2vpiNHvtdNclNvL1/HjAxi",
                             PhoneNumber = "+37061115217",
                             TypeId = 1
                         },
@@ -629,9 +715,39 @@ namespace RealEstateAPI.Migrations
                             Email = "kpigaga@gmail.com",
                             FirstName = "Karolis",
                             LastName = "Pigaga",
-                            Password = "$2a$11$.lCdZlsc3zVtGj/W1fbN6.sXmBaGsHhnA/h.xerRaEAXGUED1xVhi",
+                            Password = "$2a$11$NsOx2dcYSXgkEnsmdywERuP.5NNolrk912MeK0WDALVZJCVlyRaYW",
                             PhoneNumber = "+37061115982",
-                            TypeId = 1
+                            TypeId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "epetraitis@gmail.com",
+                            FirstName = "Eimantas",
+                            LastName = "Petraitis",
+                            Password = "$2a$11$6HC8LSn5g.yDA2OCVqiSmuia23hTJFv4yLcw.fC/SMaROPbc6.oqe",
+                            PhoneNumber = "+37061115987",
+                            TypeId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "jpovas@gmail.com",
+                            FirstName = "Jonas",
+                            LastName = "Povas",
+                            Password = "$2a$11$Woo8vl/wYTei32vtEj.xfe5KDfc5UvsI16Zn1TmlVrjaDQ2vfZ8bS",
+                            PhoneNumber = "+37061115988",
+                            TypeId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "jkovas@gmail.com",
+                            FirstName = "Jonas",
+                            LastName = "Kovas",
+                            Password = "$2a$11$k10hkrSKmjqhbHrzf1Yf6.K9Y.MktMeA5wNd6KMvSUKiWbrq5.XrC",
+                            PhoneNumber = "+37061115989",
+                            TypeId = 2
                         });
                 });
 

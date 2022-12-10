@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -20,16 +22,16 @@ namespace RealEstateAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<PropertiesController> _logger;
         private readonly IWebHostEnvironment _environment;
-        //private readonly DatabaseContext _databaseContext;
+        private readonly DatabaseContext _databaseContext;
 
         public PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<PropertiesController> logger, IWebHostEnvironment environment)
+            ILogger<PropertiesController> logger, IWebHostEnvironment environment, DatabaseContext databaseContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
             _environment = environment;
-            //_databaseContext = databaseContext;
+            _databaseContext = databaseContext;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -106,6 +108,31 @@ namespace RealEstateAPI.Controllers
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
+
+        [HttpGet("most-liked-properties")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMostLikedProperties()
+        {
+            /* var favouriteProperties = await _databaseContext.FavouriteProperties.GroupBy();*/
+            var favouriteProperties = await _databaseContext.FavouriteProperties.GroupBy(d => d.PropertyId)
+                .Select(
+                    g => new
+                    {
+                        Key = g.Key,
+                        Count = g.Count()
+                    }).OrderByDescending(x => x.Count).Take(5).ToListAsync();
+            var properties = new List<PropertyDTO>();
+            foreach (var favouriteProperty in favouriteProperties)
+            {
+                var property = await _unitOfWork.Properties.Get(x => x.Id == favouriteProperty.Key, includeProperties: "PropertyType,RentType,City,Images");
+                var propertyDTO = _mapper.Map<PropertyDTO>(property);
+                propertyDTO.NumberOfLikes = favouriteProperty.Count;
+                properties.Add(propertyDTO);
+            }
+            return Ok(properties);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

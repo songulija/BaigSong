@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstateAPI.Data
@@ -14,6 +15,6 @@ namespace RealEstateAPI.Data
         [ForeignKey(nameof(Property))]
         public int? PropertyId { get; set; }
         public virtual Property Property { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

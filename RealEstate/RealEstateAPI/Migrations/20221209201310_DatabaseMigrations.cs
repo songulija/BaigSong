@@ -204,7 +204,7 @@ namespace RealEstateAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     PropertyId = table.Column<int>(type: "int", nullable: true),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -305,15 +305,15 @@ namespace RealEstateAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Countries",
                 columns: new[] { "Id", "Date", "Title" },
-                values: new object[] { 1, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(9423), "Lithuania" });
+                values: new object[] { 1, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(9944), "Lithuania" });
 
             migrationBuilder.InsertData(
                 table: "IdentityRole",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "12133fdb-1529-4886-98da-301fd3571a65", "6aa443cb-5b58-42ba-b3cf-a19c3aeafc23", "User", "USER" },
-                    { "65390373-7cc0-455a-83eb-0926b8896272", "be3c204f-b0b6-48b0-a76c-297806d0fe6b", "Administrator", "ADMINISTRATOR" }
+                    { "7a707aec-7daf-4adc-a91b-6839fa74b8dd", "4e69c939-1d2b-4789-878b-13b1e5cb4557", "User", "USER" },
+                    { "42d1fc47-c1f5-456b-95d6-31661624825c", "20c3ac1e-a0ee-478c-9b02-7992f44b343f", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -321,11 +321,11 @@ namespace RealEstateAPI.Migrations
                 columns: new[] { "Id", "Date", "Photo", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 12, 5, 23, 6, 9, 675, DateTimeKind.Local).AddTicks(482), "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=", "Hotels" },
-                    { 2, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2493), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg", "Apartments" },
-                    { 3, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2535), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg", "Resorts" },
-                    { 4, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2540), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg", "Houses" },
-                    { 5, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(2543), "https://cf.bstatic.com/xdata/images/city/square250/777085.webp?k=b95bc65ec83682e7aafc89112ff398b1081be9696ef92556ffd4fb9648a6b807&o=", "Lands" }
+                    { 1, new DateTime(2022, 12, 9, 22, 13, 10, 214, DateTimeKind.Local).AddTicks(6053), "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=", "Hotels" },
+                    { 2, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3885), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg", "Apartments" },
+                    { 3, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3914), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg", "Resorts" },
+                    { 4, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3918), "https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg", "Houses" },
+                    { 5, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(3921), "https://cf.bstatic.com/xdata/images/city/square250/777085.webp?k=b95bc65ec83682e7aafc89112ff398b1081be9696ef92556ffd4fb9648a6b807&o=", "Lands" }
                 });
 
             migrationBuilder.InsertData(
@@ -333,8 +333,8 @@ namespace RealEstateAPI.Migrations
                 columns: new[] { "Id", "Date", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6297), "Long Term" },
-                    { 2, new DateTime(2022, 12, 5, 23, 6, 9, 678, DateTimeKind.Local).AddTicks(6630), "Short Term" }
+                    { 1, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(7135), "Long Term" },
+                    { 2, new DateTime(2022, 12, 9, 22, 13, 10, 217, DateTimeKind.Local).AddTicks(7426), "Short Term" }
                 });
 
             migrationBuilder.InsertData(
@@ -351,12 +351,12 @@ namespace RealEstateAPI.Migrations
                 columns: new[] { "Id", "CountryId", "Date", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5290), "Vilnius" },
-                    { 2, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5928), "Kaunas" },
-                    { 3, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5941), "Klaipėda" },
-                    { 4, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5944), "Palanga" },
-                    { 5, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5947), "Šiauliai" },
-                    { 6, 1, new DateTime(2022, 12, 5, 23, 6, 9, 679, DateTimeKind.Local).AddTicks(5950), "Druskininkai" }
+                    { 1, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4327), "Vilnius" },
+                    { 2, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4874), "Kaunas" },
+                    { 3, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4886), "Klaipėda" },
+                    { 4, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4888), "Palanga" },
+                    { 5, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4891), "Šiauliai" },
+                    { 6, 1, new DateTime(2022, 12, 9, 22, 13, 10, 218, DateTimeKind.Local).AddTicks(4894), "Druskininkai" }
                 });
 
             migrationBuilder.InsertData(
@@ -364,8 +364,11 @@ namespace RealEstateAPI.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "PhoneNumber", "TypeId" },
                 values: new object[,]
                 {
-                    { 1, "lsongulija@gmail.com", "Lukas", "Songulija", "$2a$11$ITWoCkAI3lE2tERFI.O9U.Caje5UVJV99O3x2IH/SP86EbSsxYvjm", "+37061115217", 1 },
-                    { 2, "kpigaga@gmail.com", "Karolis", "Pigaga", "$2a$11$.lCdZlsc3zVtGj/W1fbN6.sXmBaGsHhnA/h.xerRaEAXGUED1xVhi", "+37061115982", 1 }
+                    { 1, "lsongulija@gmail.com", "Lukas", "Songulija", "$2a$11$iQUmDutf8EQMLucFZNrMW.XW/oL2UWQ2vpiNHvtdNclNvL1/HjAxi", "+37061115217", 1 },
+                    { 2, "kpigaga@gmail.com", "Karolis", "Pigaga", "$2a$11$NsOx2dcYSXgkEnsmdywERuP.5NNolrk912MeK0WDALVZJCVlyRaYW", "+37061115982", 2 },
+                    { 3, "epetraitis@gmail.com", "Eimantas", "Petraitis", "$2a$11$6HC8LSn5g.yDA2OCVqiSmuia23hTJFv4yLcw.fC/SMaROPbc6.oqe", "+37061115987", 2 },
+                    { 4, "jpovas@gmail.com", "Jonas", "Povas", "$2a$11$Woo8vl/wYTei32vtEj.xfe5KDfc5UvsI16Zn1TmlVrjaDQ2vfZ8bS", "+37061115988", 2 },
+                    { 5, "jkovas@gmail.com", "Jonas", "Kovas", "$2a$11$k10hkrSKmjqhbHrzf1Yf6.K9Y.MktMeA5wNd6KMvSUKiWbrq5.XrC", "+37061115989", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -373,17 +376,35 @@ namespace RealEstateAPI.Migrations
                 columns: new[] { "Id", "Address", "CityId", "Date", "Description", "Price", "PropertyTypeId", "RentTypeId", "RoomNumber", "Title", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Gedimino g. 71", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(1579), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius G71", 1 },
-                    { 2, "Gedimino g. 72", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2747), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 369f, 2, 1, 2, "Vilnius G72", 1 },
-                    { 3, "Gedimino g. 73", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2792), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 400f, 2, 1, 2, "Vilnius K73", 1 },
-                    { 4, "Gedimino g. 74", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2815), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius K74", 1 },
-                    { 5, "Gedimino g. 75", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2829), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 500f, 2, 1, 2, "Vilnius K75", 1 },
-                    { 6, "Rygos g. 10", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2839), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R10", 1 },
-                    { 7, "Rygos g. 11", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2843), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R11", 1 },
-                    { 8, "Rygos g. 12", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2848), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 589f, 4, 1, 2, "Vilnius R12", 1 },
-                    { 9, "Rygos g. 13", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2853), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R13", 1 },
-                    { 10, "Rygos g. 14", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2857), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 650f, 4, 1, 2, "Vilnius R14", 1 },
-                    { 11, "Rygos g. 15", 1, new DateTime(2022, 12, 5, 23, 6, 9, 681, DateTimeKind.Local).AddTicks(2861), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R15", 1 }
+                    { 1, "Gedimino g. 71", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7669), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius G71", 1 },
+                    { 2, "Gedimino g. 72", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7933), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 369f, 2, 1, 2, "Vilnius G72", 1 },
+                    { 3, "Gedimino g. 73", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7947), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 400f, 2, 1, 2, "Vilnius K73", 1 },
+                    { 4, "Gedimino g. 74", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7951), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 350f, 2, 1, 2, "Vilnius K74", 1 },
+                    { 5, "Gedimino g. 75", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7954), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 500f, 2, 1, 2, "Vilnius K75", 1 },
+                    { 6, "Rygos g. 10", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7957), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R10", 1 },
+                    { 7, "Rygos g. 11", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7960), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R11", 1 },
+                    { 8, "Rygos g. 12", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7964), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 589f, 4, 1, 2, "Vilnius R12", 1 },
+                    { 9, "Rygos g. 13", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7967), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 600f, 4, 1, 2, "Vilnius R13", 1 },
+                    { 10, "Rygos g. 14", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7970), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 650f, 4, 1, 2, "Vilnius R14", 1 },
+                    { 11, "Rygos g. 15", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7973), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 550f, 4, 1, 2, "Vilnius R15", 1 },
+                    { 12, "Justiniškių g. 10", 1, new DateTime(2022, 12, 9, 22, 13, 10, 219, DateTimeKind.Local).AddTicks(7977), "Certainty listening no no behaviour existence assurance situation is. Because add why not esteems amiable him. Interested the unaffected mrs law friendship add principles. Indeed on people do merits to. Court heard which up above hoped grave do. Answer living law things either sir bed length. Looked before we an on merely. These no death he at share alone. Yet outward the him compass hearted are tedious.", 450f, 2, 1, 2, "Vilnius J10", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FavouriteProperties",
+                columns: new[] { "Id", "Date", "PropertyId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3236), 1, 1 },
+                    { 4, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3775), 1, 2 },
+                    { 2, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3756), 2, 1 },
+                    { 5, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3778), 2, 2 },
+                    { 10, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3790), 2, 4 },
+                    { 3, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3767), 3, 1 },
+                    { 6, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3781), 4, 2 },
+                    { 8, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3785), 4, 3 },
+                    { 9, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3788), 4, 4 },
+                    { 7, new DateTime(2022, 12, 9, 22, 13, 10, 220, DateTimeKind.Local).AddTicks(3783), 5, 2 }
                 });
 
             migrationBuilder.CreateIndex(

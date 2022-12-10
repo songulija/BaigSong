@@ -39,6 +39,8 @@ namespace RealEstateAPI.ModelsDTO
         public PropertyTypeDTO PropertyType { get; set; }
         public RentTypeDTO RentType { get; set; }
         public CityDTO City { get; set; }
+        public int NumberOfLikes { get; set; }
+        public int SeenNumber { get; set; }
         public virtual IList<CommentDTO> Comments { get; set; }
         public virtual IList<PaymentDTO> Payments { get; set; }
         public virtual IList<JournalDTO> Journals { get; set; }
