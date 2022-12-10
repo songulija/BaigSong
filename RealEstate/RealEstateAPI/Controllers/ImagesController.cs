@@ -97,7 +97,7 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> SaveFile(FileUpload fileObj)
         {
-            Image oImage = JsonConvert.DeserializeObject<Image>(fileObj.Image);
+            Image oImage = JsonConvert.DeserializeObject<Image>(fileObj.City);
             if (fileObj.file.Length > 0)
             {
                 using (var ms = new MemoryStream())

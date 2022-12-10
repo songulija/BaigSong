@@ -15,6 +15,7 @@ namespace RealEstateAPI.Data
         /*public string Photo { get; set; }*/
         [ForeignKey(nameof(Country))]
         public int? CountryId { get; set; }
+        public byte[] Photo { get; set; }
         public virtual Country Country { get; set; }
         public virtual IList<Property> Properties { get; set; }
     }

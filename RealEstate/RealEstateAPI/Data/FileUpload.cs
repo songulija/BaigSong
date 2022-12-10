@@ -9,6 +9,6 @@ namespace RealEstateAPI.Data
     public class FileUpload
     {
         public IFormFile file { get; set; }
-        public string Image { get; set; }
+        public string City { get; set; }
     }
 }

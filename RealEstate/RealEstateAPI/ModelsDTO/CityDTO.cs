@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +13,8 @@ namespace RealEstateAPI.ModelsDTO
         public DateTime Date { get; set; }
         [Required]
         public int? CountryId { get; set; }
+        public byte[] Photo { get; set; }
+        public IFormFile File { get; set; }
     }
     public class UpdateCityDTO : CreateCityDTO
     {
