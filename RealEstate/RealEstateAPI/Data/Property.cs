@@ -28,6 +28,7 @@ namespace RealEstateAPI.Data
         public int? RoomNumber { get; set; }
         public float Price { get; set; }
         public DateTime Date { get; set; }
+        public byte[] Photo { get; set; }
         public virtual IList<Comment> Comments { get; set; }
         public virtual IList<Payment> Payments { get; set; }
         public virtual IList<Journal> Journals { get; set; }

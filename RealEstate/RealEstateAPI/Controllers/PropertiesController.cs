@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,7 +41,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetAllProperties()
         {
 
-            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType,City,Images");
+            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType,City,User");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -48,9 +55,11 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProperty(int id)
         {
-            var property = await _unitOfWork.Properties.Get(p => p.Id == id,
-                includeProperties: "PropertyType,RentType,City,Comments,Journals,FavouriteObjects,Images");
-            //var property = await _databaseContext.Properties.Where(x => x.Id == id).Include(x => x.PropertyType).SingleOrDefaultAsync();
+            var property = await _databaseContext.Properties.Where(p => p.Id == id).Include(x => x.PropertyType).Include(x => x.RentType).Include(x => x.City).Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync();
+            if (property.Photo != null)
+            {
+                property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var result = _mapper.Map<PropertyDTO>(property);
             return Ok(result);
         }
@@ -60,7 +69,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByPropertyTypeId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.PropertyTypeId == id,
-                includeProperties: "PropertyType,RentType,City,Images");
+                includeProperties: "PropertyType,RentType,City");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -71,7 +85,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByRentTypeId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.RentTypeId == id,
-                includeProperties: "PropertyType,RentType,City,Images");
+                includeProperties: "PropertyType,RentType,City");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -82,7 +101,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByUserId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.UserId == id,
-                includeProperties: "PropertyType,RentType,City,Images");
+                includeProperties: "PropertyType,RentType,City");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -93,7 +117,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByCityId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.CityId == id,
-                includeProperties: "PropertyType,RentType,City,Images");
+                includeProperties: "PropertyType,RentType,City");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -104,7 +133,12 @@ namespace RealEstateAPI.Controllers
         public async Task<IActionResult> GetPropertiesByCountryId(int id)
         {
             var properties = await _unitOfWork.Properties.GetAll(f => f.City.CountryId== id,
-                includeProperties: "PropertyType,RentType,City,Images");
+                includeProperties: "PropertyType,RentType,City");
+            foreach (var property in properties)
+            {
+                if (property.Photo != null)
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+            }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
             return Ok(results);
         }
@@ -125,7 +159,13 @@ namespace RealEstateAPI.Controllers
             var properties = new List<PropertyDTO>();
             foreach (var favouriteProperty in favouriteProperties)
             {
-                var property = await _unitOfWork.Properties.Get(x => x.Id == favouriteProperty.Key, includeProperties: "PropertyType,RentType,City,Images");
+                var property = await _unitOfWork.Properties.Get(
+                    x => x.Id == favouriteProperty.Key,
+                    includeProperties: "PropertyType,RentType,City");
+                if (property.Photo != null)
+                {
+                    property.Photo = GetImage(Convert.ToBase64String(property.Photo));
+                }
                 var propertyDTO = _mapper.Map<PropertyDTO>(property);
                 propertyDTO.NumberOfLikes = favouriteProperty.Count;
                 properties.Add(propertyDTO);
@@ -137,23 +177,45 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateProperty([FromBody] CreatePropertyDTO propertyDTO)
+        public async Task<IActionResult> CreateProperty([FromForm] CreatePropertyDTO propertyDTO)
         {
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Invalid CREATE attempt in {nameof(CreateProperty)}");
                 return BadRequest();
             }
-            var property = _mapper.Map<Property>(propertyDTO);
-            await _unitOfWork.Properties.Insert(property);
-            await _unitOfWork.Save();
-            return CreatedAtRoute("GetProperty", new { id = property.Id }, property);
+            if (propertyDTO.File == null || propertyDTO.File.Length < 1)
+            {
+                return BadRequest("File not selected");
+            }
+            Property oProperty = _mapper.Map<Property>(propertyDTO);
+            using (var ms = new MemoryStream())
+            {
+                //copy content of file to target stream (memory stream)
+                propertyDTO.File.CopyTo(ms);
+                //writes stream contents into byte array
+                var fileBytes = ms.ToArray();
+                oProperty.Photo = fileBytes;
+                await _unitOfWork.Properties.Insert(oProperty);
+                await _unitOfWork.Save();
+                if (oProperty.Id > 0)
+                {
+                    var createdProperty = await _databaseContext.Properties.Where(x => x.Id == oProperty.Id).Include(x => x.PropertyType).Include(x => x.RentType).Include(x => x.City).Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync();
+                    if (createdProperty.Photo != null)
+                    {
+                        createdProperty.Photo = GetImage(Convert.ToBase64String(createdProperty.Photo));
+                    }
+                    var result = _mapper.Map<PropertyDTO>(createdProperty);
+                    return Ok(result);
+                }
+            }
+            return BadRequest("File was found but something brake allong the way");
         }
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateProperty(int id, [FromBody] UpdatePropertyDTO propertyDTO)
+        public async Task<IActionResult> UpdateProperty(int id, [FromForm] UpdatePropertyDTO propertyDTO)
         {
             if (!ModelState.IsValid || id < 1)
             {
@@ -166,12 +228,37 @@ namespace RealEstateAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateProperty)}");
                 return BadRequest("Submited invalid data");
             }
-            //map favouritePropertyDTO to favouriteProperty domain object. puts all fields values from dto to favouriteProperty object
+            else if ((propertyDTO.File == null || propertyDTO.File.Length < 1) && propertyDTO.Photo == null)
+            {
+                return BadRequest("Photo is missing");
+            }
             _mapper.Map(propertyDTO, property);
-            _unitOfWork.Properties.Update(property);
-            await _unitOfWork.Save();
-
-            return NoContent();
+            //if nothing was changed
+            if (propertyDTO.Photo != null && propertyDTO.File == null)
+            {
+                _unitOfWork.Properties.Update(property);
+                await _unitOfWork.Save();
+            }
+            if (propertyDTO.File != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    //copy content of file to target stream (memory stream)
+                    propertyDTO.File.CopyTo(ms);
+                    //writes stream contents into byte array
+                    var fileBytes = ms.ToArray();
+                    property.Photo = fileBytes;
+                    _unitOfWork.Properties.Update(property);
+                    await _unitOfWork.Save();
+                }
+            }
+            var updatedProperty = await _databaseContext.Properties.Where(x => x.Id == id).Include(x => x.PropertyType).Include(x => x.RentType).Include(x => x.City).Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync();
+            if (updatedProperty.Photo != null)
+            {
+                updatedProperty.Photo = GetImage(Convert.ToBase64String(updatedProperty.Photo));
+            }
+            var result = _mapper.Map<PropertyDTO>(updatedProperty);
+            return Ok(result);
         }
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -188,6 +275,16 @@ namespace RealEstateAPI.Controllers
             await _unitOfWork.Properties.Delete(id);
             await _unitOfWork.Save();
             return NoContent();
+        }
+
+        public static byte[] GetImage(string sBase64String)
+        {
+            byte[] bytes = null;
+            if (!string.IsNullOrEmpty(sBase64String))
+            {
+                bytes = Convert.FromBase64String(sBase64String);
+            }
+            return bytes;
         }
     }
 }

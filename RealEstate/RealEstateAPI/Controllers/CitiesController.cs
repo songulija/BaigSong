@@ -117,7 +117,13 @@ namespace RealEstateAPI.Controllers
                 await _unitOfWork.Save();
                 if (oCity.Id > 0)
                 {
-                    return Ok();
+                    var createdCity = await _databaseContext.Cities.Where(x => x.Id == oCity.Id).Include(x => x.Country).FirstOrDefaultAsync();
+                    if (createdCity.Photo != null)
+                    {
+                        createdCity.Photo = GetImage(Convert.ToBase64String(createdCity.Photo));
+                    }
+                    var result = _mapper.Map<CityDTO>(createdCity);
+                    return Ok(result);
                 }
             }
             return BadRequest("File was found but something brake allong the way");

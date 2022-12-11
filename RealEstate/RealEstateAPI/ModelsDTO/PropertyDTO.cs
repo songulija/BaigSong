@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,6 +27,8 @@ namespace RealEstateAPI.ModelsDTO
         public float Price { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public byte[] Photo { get; set; }
+        public IFormFile File { get; set; }
     }
 
     public class UpdatePropertyDTO : CreatePropertyDTO
