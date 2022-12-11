@@ -5,7 +5,11 @@ using Microsoft.Extensions.Logging;
 using RealEstateAPI.Data;
 using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -70,6 +74,13 @@ namespace RealEstateAPI.Controllers
             {
                 _logger.LogError($"Invalid CREATE attempt in {nameof(CreateComment)}");
                 return BadRequest(ModelState);
+            }
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString();
+            if(commentDTO.UserId < 1)
+            {
+                commentDTO.UserId = int.Parse(userId);
             }
             var comment = _mapper.Map<Comment>(commentDTO);
             await _unitOfWork.Comments.Insert(comment);

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -55,12 +56,18 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProperty(int id)
         {
+            /*var email = string.Empty;
+            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                email = identity.FindFirst(ClaimTypes.Name).Value;
+            }*/
             var property = await _databaseContext.Properties.Where(p => p.Id == id)
                 .Include(x => x.PropertyType)
                 .Include(x => x.RentType)
                 .Include(x => x.City)
-                .Include(x => x.Comments)
                 .Include(x => x.User)
+                .Include(x => x.Comments)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync();
             if (property.Photo != null)
             {

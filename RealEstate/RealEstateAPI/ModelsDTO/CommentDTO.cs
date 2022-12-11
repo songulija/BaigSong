@@ -5,7 +5,6 @@ namespace RealEstateAPI.ModelsDTO
 {
     public class CreateCommentDTO
     {
-        [Required]
         public int UserId { get; set; }
         [Required]
         public int PropertyId { get; set; }
