@@ -4,11 +4,7 @@ using RealEstateAPI.Data;
 using System;
 
 namespace RealEstateAPI.Configurations.Entities
-{ /// <summary>
-  /// Letting BrandConfiguration class know that it'll be inhereted from
-  /// IEntityTypeConfiguration of type Brand
-  /// here we will define our initial Brands for database
-  /// </summary>
+{
     public class CitiesConfiguration : IEntityTypeConfiguration<City>
     {
         public void Configure(EntityTypeBuilder<City> builder)

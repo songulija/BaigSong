@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -108,20 +109,39 @@ namespace RealEstateAPI.Controllers
             return Ok(results);
         }
 
-        [HttpGet("user/{id:int}")]
+        [HttpGet("user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPropertiesByUserId(int id)
+        public async Task<IActionResult> GetPropertiesByUserId([FromQuery] PaginationParams @params)
         {
-            var properties = await _unitOfWork.Properties.GetAll(f => f.UserId == id,
-                includeProperties: "PropertyType,RentType,City");
+            /*var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());*/
+            //to get only selected page items use Skip method. to skip number of rows
+            //and use take to get only selected number of rows
+            var properties = await _databaseContext.Properties
+               /* .Where(x => x.UserId == userId)*/
+                .Include(x => x.PropertyType)
+                .Include(x => x.RentType)
+                .Include(x => x.City)
+                .Include(x => x.User)
+                .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage)
+                .AsNoTracking()
+                .ToListAsync();
+            var pagesNumber = await _databaseContext.Properties.CountAsync();
+            var paginationMetadata = new PaginationMetaData(pagesNumber, @params.Page, @params.ItemsPerPage);
             foreach (var property in properties)
             {
                 if (property.Photo != null)
                     property.Photo = GetImage(Convert.ToBase64String(property.Photo));
             }
-            var results = _mapper.Map<IList<PropertyDTO>>(properties);
-            return Ok(results);
+            //var results = _mapper.Map<IList<PropertyDTO>>(properties);
+
+            //return pagination meta data as response headers
+            //Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+            return Ok(new {
+                properties = properties,
+                pagination = paginationMetadata
+            });
         }
 
         [HttpGet("city/{id:int}")]

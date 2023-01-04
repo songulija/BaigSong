@@ -3,26 +3,13 @@ using RealEstateAPI.Configurations.Entities;
 
 namespace RealEstateAPI.Data
 {
-    /// <summary>
-    /// DatabaseContext inherits from IdentityDbContext and i'm adding
-    /// ApiUser as its context. basically DbContext relative to ApiUser becouse
-    /// by default it gonna use identity user
-    /// </summary>
     public class DatabaseContext : DbContext
     {
-        /**
-        * Create a constructor. With DbContextOptions 
-        * these options can be used to configure DataContext
-        * And be use base class constructor. When using ApplicationDbContext class
-        * we will have to provide those options to this constructor 
-        * then it'll go to constructor of ApplicationDbContext class
-        */
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
         {
         }
 
-        //With DbSets we define tables in our database. we can get and set smth to those tables
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -48,7 +35,6 @@ namespace RealEstateAPI.Data
             builder.ApplyConfiguration(new RentTypesConfiguration());
             builder.ApplyConfiguration(new CountriesConfiguration());
             builder.ApplyConfiguration(new CitiesConfiguration());
-            //applying RoleConfiguration. To add two user roles
             builder.ApplyConfiguration(new PropertiesConfiguration());
             builder.ApplyConfiguration(new FavouritePropertiesConfiguration());
         }
