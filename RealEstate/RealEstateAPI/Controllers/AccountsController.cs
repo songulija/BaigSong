@@ -8,6 +8,8 @@ using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
 using RealEstateAPI.Services;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
@@ -55,6 +57,19 @@ namespace RealEstateAPI.Controllers
             var result = _mapper.Map<DisplayUserDTO>(user);
             return Ok(result);
         }
+
+        [HttpGet("info")]
+        [Authorize(Roles = "USER,ADMINISTRATOR")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+            var user = await _unitOfWork.Users.Get(x => x.Id == userId);
+            var result = _mapper.Map<DisplayUserDTO>(user);
+            return Ok(result);
+        }
+
         [HttpPost]
         [Authorize(Roles = "ADMINISTRATOR")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

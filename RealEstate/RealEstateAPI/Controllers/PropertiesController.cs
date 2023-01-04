@@ -64,6 +64,7 @@ namespace RealEstateAPI.Controllers
             }*/
             var property = await _databaseContext.Properties.Where(p => p.Id == id)
                 .Include(x => x.PropertyType)
+                .Include(x => x.FavouriteObjects)
                 .Include(x => x.RentType)
                 .Include(x => x.City)
                 .Include(x => x.User)
