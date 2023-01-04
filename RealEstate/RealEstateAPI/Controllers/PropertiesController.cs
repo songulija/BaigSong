@@ -114,11 +114,11 @@ namespace RealEstateAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPropertiesByUserId([FromQuery] PaginationParams @params)
         {
-            /*var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());*/
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
             //to get only selected page items use Skip method. to skip number of rows
             //and use take to get only selected number of rows
             var properties = await _databaseContext.Properties
-               /* .Where(x => x.UserId == userId)*/
+                .Where(x => x.UserId == userId)
                 .Include(x => x.PropertyType)
                 .Include(x => x.RentType)
                 .Include(x => x.City)
@@ -127,7 +127,7 @@ namespace RealEstateAPI.Controllers
                 .Take(@params.ItemsPerPage)
                 .AsNoTracking()
                 .ToListAsync();
-            var pagesNumber = await _databaseContext.Properties.CountAsync();
+            var pagesNumber = await _databaseContext.Properties.Where(x => x.UserId == userId).CountAsync();
             var paginationMetadata = new PaginationMetaData(pagesNumber, @params.Page, @params.ItemsPerPage);
             foreach (var property in properties)
             {
@@ -221,6 +221,8 @@ namespace RealEstateAPI.Controllers
             {
                 return BadRequest("File not selected");
             }
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+            propertyDTO.UserId = userId;
             Property oProperty = _mapper.Map<Property>(propertyDTO);
             using (var ms = new MemoryStream())
             {
@@ -265,6 +267,8 @@ namespace RealEstateAPI.Controllers
             {
                 return BadRequest("Photo is missing");
             }
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+            propertyDTO.UserId = userId;
             _mapper.Map(propertyDTO, property);
             //if nothing was changed
             if (propertyDTO.Photo != null && propertyDTO.File == null)
@@ -304,6 +308,11 @@ namespace RealEstateAPI.Controllers
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteProperty)}");
                 return BadRequest();
+            }
+            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(x => x.PropertyId == id);
+            foreach (var favouriteProperty in favouriteProperties)
+            {
+                await _unitOfWork.FavouriteProperties.Delete(favouriteProperty.Id);
             }
             await _unitOfWork.Properties.Delete(id);
             await _unitOfWork.Save();
