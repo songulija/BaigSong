@@ -5,6 +5,9 @@
         private const int _maxItemsPerPage = 10;
         private int itemsPerPage;
         public int Page { get; set; } = 1;
+        public int PropertyTypeId { get; set; }
+        public int CityId { get; set; }
+        public string Title { get; set; }
         public int ItemsPerPage
         {
             get

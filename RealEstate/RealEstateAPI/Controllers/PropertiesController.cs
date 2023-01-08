@@ -40,28 +40,49 @@ namespace RealEstateAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllProperties()
+        public async Task<IActionResult> GetAllProperties([FromQuery] PaginationParams @params)
         {
-
-            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType,City,User");
+            var query = _databaseContext.Properties
+                .Include(x => x.PropertyType)
+                .Include(x => x.RentType)
+                .Include(x => x.City)
+                .Include(x => x.User)
+                .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage)
+                .AsNoTracking();
+            if (@params.PropertyTypeId != 0)
+            {
+                query = query.Where(x => x.PropertyTypeId == @params.PropertyTypeId);
+            }
+            if (@params.CityId != 0)
+            {
+                query = query.Where(x => x.CityId == @params.CityId);
+            }
+            if (@params.Title != null)
+            {
+                query = query.Where(x => x.Title.Contains(@params.Title));
+            }
+            var properties = await query.ToListAsync();
+            var pagesNumber = await _databaseContext.Properties.CountAsync();
+            var paginationMetadata = new PaginationMetaData(pagesNumber, @params.Page, @params.ItemsPerPage);
             foreach (var property in properties)
             {
                 if (property.Photo != null)
                     property.Photo = GetImage(Convert.ToBase64String(property.Photo));
             }
             var results = _mapper.Map<IList<PropertyDTO>>(properties);
-            return Ok(results);
+            return Ok(new
+            {
+                properties = properties,
+                pagination = paginationMetadata
+            });
         }
+
         [HttpGet("{id:int}", Name = "GetProperty")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProperty(int id)
         {
-            /*var email = string.Empty;
-            if (HttpContext.User.Identity is ClaimsIdentity identity)
-            {
-                email = identity.FindFirst(ClaimTypes.Name).Value;
-            }*/
             var property = await _databaseContext.Properties.Where(p => p.Id == id)
                 .Include(x => x.PropertyType)
                 .Include(x => x.FavouriteObjects)
@@ -76,6 +97,13 @@ namespace RealEstateAPI.Controllers
                 property.Photo = GetImage(Convert.ToBase64String(property.Photo));
             }
             var result = _mapper.Map<PropertyDTO>(property);
+            var claimId = User.Identity.IsAuthenticated;
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+                var favouriteProperty = await _unitOfWork.FavouriteProperties.Get(x => x.UserId == userId && x.PropertyId == property.Id);
+                result.Liked = favouriteProperty != null ? true : false;
+            }
             return Ok(result);
         }
         [HttpGet("propertyType/{id:int}")]
@@ -298,6 +326,60 @@ namespace RealEstateAPI.Controllers
             var result = _mapper.Map<PropertyDTO>(updatedProperty);
             return Ok(result);
         }
+
+        [HttpPut("{id:int}/like")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> LikeProperty(int id, [FromBody] UpdatePropertyDTO propertyDTO)
+        {
+            if (!ModelState.IsValid || id < 1)
+            {
+                _logger.LogError($"Invalid UPDATE ettempt in {nameof(UpdateProperty)}");
+                return BadRequest();
+            }
+            var property = await _unitOfWork.Properties.Get(f => f.Id == id);
+            if (property == null)
+            {
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateProperty)}");
+                return BadRequest("Submited invalid data");
+            }
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+            propertyDTO.UserId = userId;
+            _mapper.Map(propertyDTO, property);
+            if (propertyDTO.Like == true)
+            {
+                propertyDTO.FavouriteObject.UserId = userId;
+                var favouriteObject = _mapper.Map<FavouriteProperty>(propertyDTO.FavouriteObject);
+                await _unitOfWork.FavouriteProperties.Insert(favouriteObject);
+                await _unitOfWork.Save();
+                if(favouriteObject.Id < 1)
+                {
+                    return BadRequest("Submited invalid data. Like not saved.");
+                }
+            } else if(propertyDTO.Like == false)
+            {
+                var favouriteProperty = await _unitOfWork.FavouriteProperties.Get(x => x.PropertyId == id && x.UserId == userId);
+                if(favouriteProperty == null)
+                {
+                    return BadRequest("Submited invalid data. Like not deleted");
+                }
+                await _unitOfWork.FavouriteProperties.Delete(favouriteProperty.Id);
+                await _unitOfWork.Save();
+            }
+            var updatedProperty = await _databaseContext.Properties.Where(x => x.Id == id)
+                .Include(x => x.PropertyType)
+                .Include(x => x.RentType)
+                .Include(x => x.City)
+                .Include(x => x.Comments)
+                .Include(x => x.User)
+                .Include(x => x.FavouriteObjects)
+                .FirstOrDefaultAsync();
+            var result = _mapper.Map<PropertyDTO>(updatedProperty);
+            result.Liked = propertyDTO.Like;
+            return Ok(result);
+        }
+
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

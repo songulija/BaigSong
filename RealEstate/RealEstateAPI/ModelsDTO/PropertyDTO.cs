@@ -33,6 +33,8 @@ namespace RealEstateAPI.ModelsDTO
 
     public class UpdatePropertyDTO : CreatePropertyDTO
     {
+        public virtual FavouritePropertyDTO FavouriteObject { get; set; }
+        public bool Like { get; set; }
     }
 
     public class PropertyDTO : CreatePropertyDTO
