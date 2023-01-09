@@ -37,18 +37,29 @@ namespace RealEstateAPI.Controllers
             _environment = environment;
             _databaseContext = databaseContext;
         }
+
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllProperties()
+        {
+            var properties = await _unitOfWork.Properties.GetAll(includeProperties: "PropertyType,RentType,City,User");
+            var results = _mapper.Map<IList<PropertyDTO>>(properties);
+            return Ok(results);
+        }
+
+        [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllProperties([FromQuery] PaginationParams @params)
+        public async Task<IActionResult> GetPropertiesByParams([FromQuery] PaginationParams @params)
         {
             var query = _databaseContext.Properties
                 .Include(x => x.PropertyType)
                 .Include(x => x.RentType)
                 .Include(x => x.City)
                 .Include(x => x.User)
-                .Skip((@params.Page - 1) * @params.ItemsPerPage)
-                .Take(@params.ItemsPerPage)
+                //.Skip((@params.Page - 1) * @params.ItemsPerPage)
+                //.Take(@params.ItemsPerPage)
                 .AsNoTracking();
             if (@params.PropertyTypeId != 0)
             {
@@ -62,8 +73,11 @@ namespace RealEstateAPI.Controllers
             {
                 query = query.Where(x => x.Title.Contains(@params.Title));
             }
-            var properties = await query.ToListAsync();
-            var pagesNumber = await _databaseContext.Properties.CountAsync();
+            var pagesNumber = await query.CountAsync();
+            var properties = await query
+                .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage)
+                .ToListAsync();
             var paginationMetadata = new PaginationMetaData(pagesNumber, @params.Page, @params.ItemsPerPage);
             foreach (var property in properties)
             {
