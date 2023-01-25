@@ -8,21 +8,22 @@ using RealEstateAPI.IRepository;
 using RealEstateAPI.ModelsDTO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RealEstateAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FavouritePropertyController : ControllerBase
+    public class FavouritePropertiesController : ControllerBase
     {
         // IUnitOfWork registers for every variation of GenericRepository
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<FavouritePropertyController> _logger;
+        private readonly ILogger<FavouritePropertiesController> _logger;
         private readonly DatabaseContext _databaseContext;
 
-        public FavouritePropertyController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<FavouritePropertyController> logger, DatabaseContext databaseContext)
+        public FavouritePropertiesController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<FavouritePropertiesController> logger, DatabaseContext databaseContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -57,15 +58,29 @@ namespace RealEstateAPI.Controllers
             return Ok(results.Count);
         }
 
-        [HttpGet("user/{id:int}")]
+        [HttpGet("user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetFavouritePropertiesByUserId(int id)
+        public async Task<IActionResult> GetFavouritePropertiesByUserId([FromQuery] PaginationParams @params)
         {
-            var favouriteProperties = await _unitOfWork.FavouriteProperties.GetAll(f => f.UserId == id,
-                includeProperties: "Property,User");
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value.ToString());
+            var favouriteProperties = await _databaseContext.FavouriteProperties
+                .Where(x => x.UserId == userId)
+                .Include(x => x.User)
+                .Include(x => x.Property)
+                .ThenInclude(x => x.City)
+                .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                .Take(@params.ItemsPerPage)
+                .AsNoTracking()
+                .ToListAsync();
+            var pagesNumber = await _databaseContext.FavouriteProperties.Where(x => x.UserId == userId).CountAsync();
+            var paginationMetadata = new PaginationMetaData(pagesNumber, @params.Page, @params.ItemsPerPage);
             var results = _mapper.Map<IList<FavouritePropertyDTO>>(favouriteProperties);
-            return Ok(results);
+            return Ok(new
+            {
+                favouriteProperties = results,
+                pagination = paginationMetadata
+            });
         }
 
         [HttpPost]
